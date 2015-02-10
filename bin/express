@@ -33,6 +33,7 @@ program
   .option('-c, --css <engine>', 'add stylesheet <engine> support (less|stylus|compass) (defaults to plain css)')
   .option('    --git', 'add .gitignore')
   .option('-f, --force', 'force on non-empty directory')
+  .option('-g, --grunt', 'add grunt support')
   .parse(process.argv);
 
 if (!exit.exited) {
@@ -94,6 +95,7 @@ function createApplication(app_name, path) {
   var www = loadTemplate('js/www');
   var index = loadTemplate('js/routes/index.js');
   var users = loadTemplate('js/routes/users.js');
+  var grunt = loadTemplate('js/Gruntfile.js');
 
   // CSS
   var css = loadTemplate('css/style.css');
@@ -184,7 +186,7 @@ function createApplication(app_name, path) {
           'serve-favicon': '~2.2.0',
           'debug': '~2.1.1'
       }
-    }
+    };
 
     switch (program.template) {
       case 'jade':
@@ -230,6 +232,10 @@ function createApplication(app_name, path) {
 
     if (program.git) {
       write(path + '/.gitignore', fs.readFileSync(__dirname + '/../templates/js/gitignore', 'utf-8'));
+    }
+
+    if (program.grunt) {
+        write(path + '/Gruntfile.js', grunt, 0755);
     }
 
     complete();
